@@ -20,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/users") // Best practice: use plural nouns
+    @PostMapping("/adduser") // Best practice: use plural nouns
     public ResponseEntity<UserResponse> addUser(@RequestBody User user) {
         User savedUser = userService.addUser(user);
 

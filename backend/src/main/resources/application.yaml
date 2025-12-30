@@ -3,12 +3,12 @@ spring:
     name: user-management-app
 
   datasource:
-    url: JDBC:postgresql://localhost:5432/usermanagement
+    url: jdbc:postgresql://localhost:5432/usermanagement
     username: postgres
-    password: postgres
+    password: root
     driver-class-name: org.postgresql.Driver
 
-    Hikari:
+    hikari:
       pool-name: HikariCP
       maximum-pool-size: 10
       minimum-idle: 5
