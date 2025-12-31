@@ -1,11 +1,16 @@
 package com.wiz.usermanagement.service.impl;
 
+import com.wiz.usermanagement.dto.UserRequest;
+import com.wiz.usermanagement.dto.UserResponse;
 import com.wiz.usermanagement.exception.EmailAlreadyExistsException;
+import com.wiz.usermanagement.exception.UserNotFoundException;
 import com.wiz.usermanagement.model.User;
 import com.wiz.usermanagement.repository.UserRepository;
 import com.wiz.usermanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,10 +23,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+    public UserResponse addUser(UserRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("Email already in use");
         }
-        return userRepository.save(user);
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setEmail(request.getPassword());
+
+        User savedUser = userRepository.save(user);
+
+        return new UserResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
+    }
+
+
+    @Override
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail()
+                )).toList();
+    }
+
+    @Override
+    public UserResponse getUserById(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
     }
 }

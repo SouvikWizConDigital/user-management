@@ -11,25 +11,43 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handle specific exceptions (e.g., Duplicate Email)
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ExceptionDetails> handleRuntimeException(RuntimeException ex, WebRequest request) {
-        ExceptionDetails error = new ExceptionDetails(
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handleUserNotFound(UserNotFoundException ex, WebRequest request) {
+        ExceptionDetails exception = new ExceptionDetails(
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false)
         );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception);
     }
 
-    // Handle generic exceptions (The Fallback)
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionDetails> handleGlobalException(Exception ex, WebRequest request) {
-        ExceptionDetails error = new ExceptionDetails(
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ExceptionDetails> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex, WebRequest request) {
+        ExceptionDetails exception = new ExceptionDetails(
                 LocalDateTime.now(),
-                "An unexpected error occurred",
+                ex.getMessage(),
                 request.getDescription(false)
         );
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ExceptionDetails> handleRuntimeException(RuntimeException ex, WebRequest request) {
+        ExceptionDetails exception = new ExceptionDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionDetails> handleGlobalException(Exception ex, WebRequest request) {
+        ExceptionDetails exception = new ExceptionDetails(
+                LocalDateTime.now(),
+                "Internal server error",
+                request.getDescription(false)
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception);
     }
 }
