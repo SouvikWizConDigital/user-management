@@ -60,4 +60,38 @@ public class UserServiceImpl implements UserService {
                 user.getEmail()
         );
     }
+
+    @Override
+    public UserResponse updateUser(Integer userId, UserRequest userRequest) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "User not found with id: " + userId));
+
+        existingUser.setName(userRequest.getName());
+        existingUser.setEmail(userRequest.getEmail());
+        existingUser.setPassword(userRequest.getPassword());
+
+        User updatedUser = userRepository.save(existingUser);
+
+        UserResponse response = new UserResponse();
+        response.setId(updatedUser.getId());
+        response.setName(updatedUser.getName());
+        response.setEmail(updatedUser.getEmail());
+
+        return response;
+    }
+
+    @Override
+    public void deleteUser(Integer userId) {
+
+        // Check if user exists
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "User not found with id: " + userId));
+
+        // Delete user
+        userRepository.delete(user);
+    }
+
+
 }

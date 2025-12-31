@@ -2,7 +2,6 @@ package com.wiz.usermanagement.service;
 
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
-import com.wiz.usermanagement.model.User;
 import jakarta.validation.constraints.Positive;
 
 import java.util.List;
@@ -14,4 +13,8 @@ public interface UserService {
     List<UserResponse> getAllUsers();
 
     UserResponse getUserById(@Positive Integer userId);
+
+    UserResponse updateUser(@Positive Integer userId, UserRequest user);
+
+    void deleteUser(@Positive Integer userId);
 }
