@@ -2,7 +2,6 @@ package com.wiz.usermanagement.controller;
 
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
-import com.wiz.usermanagement.model.User;
 import com.wiz.usermanagement.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/user")
 @Validated
 public class UserController {
 
@@ -45,9 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/updateuser/{userId}")
-    public ResponseEntity<UserResponse> updateUser(
-            @PathVariable @Positive Integer userId,
-            @Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable @Positive Integer userId, @Valid @RequestBody UserRequest userRequest) {
         UserResponse response = userService.updateUser(userId, userRequest);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

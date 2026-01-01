@@ -7,20 +7,18 @@ import com.wiz.usermanagement.exception.UserNotFoundException;
 import com.wiz.usermanagement.model.User;
 import com.wiz.usermanagement.repository.UserRepository;
 import com.wiz.usermanagement.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     public final UserRepository userRepository;
-
-    @Autowired // for 1 constructor it is optional
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponse addUser(UserRequest request) {
@@ -28,10 +26,11 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistsException("Email already in use");
         }
 
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setEmail(request.getPassword());
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
 
         User savedUser = userRepository.save(user);
 
@@ -67,11 +66,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(
                         "User not found with id: " + userId));
 
-        existingUser.setName(userRequest.getName());
-        existingUser.setEmail(userRequest.getEmail());
-        existingUser.setPassword(userRequest.getPassword());
+        User user = User.builder()
+                .id(existingUser.getId())
+                .name(userRequest.getName())
+                .email(userRequest.getEmail())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
+                .build();
 
-        User updatedUser = userRepository.save(existingUser);
+        User updatedUser = userRepository.save(user);
 
         UserResponse response = new UserResponse();
         response.setId(updatedUser.getId());
@@ -83,13 +85,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Integer userId) {
-
-        // Check if user exists
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(
                         "User not found with id: " + userId));
 
-        // Delete user
         userRepository.delete(user);
     }
 

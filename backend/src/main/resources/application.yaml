@@ -27,8 +27,23 @@ spring:
 
 server:
   port: 8080
+  servlet:
+    context-path: /api/v1
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+security:
+  jwt:
+    secret: ThgwpUKBr18W7FNFeGJ9mONwg52FNfh2Q0lbrABhv+0=
+    access-token-expiration: 900000 # 15 mins
+    refresh-token-expiration: 604800000 # 7 days
+
+#springdoc:
+#  swagger-ui:
+#    operations-sorter: method
+#    tags-sorter: alpha
+#    display-request-duration: true
+
