@@ -3,6 +3,7 @@ package com.wiz.usermanagement.security.controller;
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.security.dto.LoginRequest;
 import com.wiz.usermanagement.security.service.AccountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication")
 public class AccountController {
 
     private final AccountService accountService;

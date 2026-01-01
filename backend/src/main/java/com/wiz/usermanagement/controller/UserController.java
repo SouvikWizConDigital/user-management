@@ -3,6 +3,8 @@ package com.wiz.usermanagement.controller;
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
 import com.wiz.usermanagement.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @Validated
+@Tag(name = "User-Management")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     public final UserService userService;

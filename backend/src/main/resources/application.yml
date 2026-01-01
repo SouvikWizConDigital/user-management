@@ -41,9 +41,12 @@ security:
     access-token-expiration: 900000 # 15 mins
     refresh-token-expiration: 604800000 # 7 days
 
-#springdoc:
-#  swagger-ui:
-#    operations-sorter: method
-#    tags-sorter: alpha
-#    display-request-duration: true
+springdoc:
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
 
