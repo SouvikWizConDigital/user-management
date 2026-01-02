@@ -44,8 +44,8 @@ The documentation is split into logical groups. You can use the links below to a
 ---
 
 ### 🚀 Technical Stack
-* **Java:** 25
-* **Framework:** Spring Boot 4.0.1
+* **Java:** 17
+* **Framework:** Spring Boot 3.3.4
 * **Security:** Spring Security (JWT Stateless)
 * **Database:** PostgreSQL
 * **Docs:** SpringDoc OpenAPI 2.5.0
