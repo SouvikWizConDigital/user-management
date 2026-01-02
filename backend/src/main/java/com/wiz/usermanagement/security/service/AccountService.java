@@ -4,7 +4,7 @@ import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.model.User;
 import com.wiz.usermanagement.repository.UserRepository;
 import com.wiz.usermanagement.security.dto.LoginRequest;
-import com.wiz.usermanagement.security.dto.RefreshToken;
+import com.wiz.usermanagement.security.model.RefreshToken;
 import com.wiz.usermanagement.security.repository.RefreshTokenRepository;
 import com.wiz.usermanagement.security.util.JwtUtil;
 import jakarta.servlet.http.Cookie;

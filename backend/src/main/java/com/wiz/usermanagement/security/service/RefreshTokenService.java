@@ -1,7 +1,7 @@
 package com.wiz.usermanagement.security.service;
 
 import com.wiz.usermanagement.model.User;
-import com.wiz.usermanagement.security.dto.RefreshToken;
+import com.wiz.usermanagement.security.model.RefreshToken;
 import com.wiz.usermanagement.security.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

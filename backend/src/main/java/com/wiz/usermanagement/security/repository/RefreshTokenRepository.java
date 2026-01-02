@@ -1,7 +1,7 @@
 package com.wiz.usermanagement.security.repository;
 
 import com.wiz.usermanagement.model.User;
-import com.wiz.usermanagement.security.dto.RefreshToken;
+import com.wiz.usermanagement.security.model.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

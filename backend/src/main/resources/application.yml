@@ -12,9 +12,9 @@ spring:
       pool-name: HikariCP
       maximum-pool-size: 10
       minimum-idle: 5
-      idle-timeout: 30000
-      max-lifetime: 1800000
-      connection-timeout: 30000
+      idle-timeout: 30000 # 30 seconds
+      max-lifetime: 1800000 # 30 minutes
+      connection-timeout: 30000 # 30 seconds
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -38,8 +38,8 @@ logging:
 security:
   jwt:
     secret: ThgwpUKBr18W7FNFeGJ9mONwg52FNfh2Q0lbrABhv+0=
-    access-token-expiration: 900000 # 15 mins
-    refresh-token-expiration: 604800000 # 7 days
+    access-token-expiration: 900000 # 15 mins = 1000 * 60 * 15
+    refresh-token-expiration: 604800000 # 7 days = 7 * 24 * 60 * 60 * 1000
 
 springdoc:
   swagger-ui:

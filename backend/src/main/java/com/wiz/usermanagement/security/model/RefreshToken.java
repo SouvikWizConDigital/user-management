@@ -1,4 +1,4 @@
-package com.wiz.usermanagement.security.dto;
+package com.wiz.usermanagement.security.model;
 
 import com.wiz.usermanagement.model.User;
 import jakarta.persistence.*;
