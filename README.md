@@ -1,6 +1,6 @@
 # 🚀 User Management System API
 
-This project provides a robust backend for user identity and management, powered by **Spring Boot 4** and **PostgreSQL**. The API is fully documented using **OpenAPI 3.0**.
+This project provides a robust backend for user identity and management, powered by **Spring Boot 3** and **PostgreSQL**. The API is fully documented using **OpenAPI 2.5**.
 
 ---
 
