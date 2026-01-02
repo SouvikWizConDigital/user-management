@@ -2,6 +2,7 @@ package com.wiz.usermanagement.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,9 @@ public class UserRequest {
     @NotBlank
     @Size(min = 8)
     private String password;
+
+    @NotBlank
+    @Pattern(regexp = "^[0-9]{10}$")
+    private String phoneNumber;
 }
 

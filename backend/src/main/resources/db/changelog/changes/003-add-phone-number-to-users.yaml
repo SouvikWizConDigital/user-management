@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-add-phone-number-to-users
+      author: souvik
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: phone_number
+                  type: VARCHAR(10)

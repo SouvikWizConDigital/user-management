@@ -30,11 +30,12 @@ public class UserServiceImpl implements UserService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .phoneNumber(request.getPhoneNumber())
                 .build();
 
         User savedUser = userRepository.save(user);
 
-        return new UserResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
+        return new UserResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getPhoneNumber());
     }
 
 
@@ -45,7 +46,8 @@ public class UserServiceImpl implements UserService {
                 .map(user -> new UserResponse(
                         user.getId(),
                         user.getName(),
-                        user.getEmail()
+                        user.getEmail(),
+                        user.getPhoneNumber()
                 )).toList();
     }
 
@@ -56,7 +58,8 @@ public class UserServiceImpl implements UserService {
         return new UserResponse(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getPhoneNumber()
         );
     }
 
@@ -71,6 +74,7 @@ public class UserServiceImpl implements UserService {
                 .name(userRequest.getName())
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
+                .phoneNumber(userRequest.getPhoneNumber())
                 .build();
 
         User updatedUser = userRepository.save(user);
@@ -79,6 +83,7 @@ public class UserServiceImpl implements UserService {
         response.setId(updatedUser.getId());
         response.setName(updatedUser.getName());
         response.setEmail(updatedUser.getEmail());
+        response.setPhoneNumber(updatedUser.getPhoneNumber());
 
         return response;
     }
