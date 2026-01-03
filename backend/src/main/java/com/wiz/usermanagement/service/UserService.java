@@ -17,4 +17,8 @@ public interface UserService {
     UserResponse updateUser(@Positive Integer userId, UserRequest user);
 
     void deleteUser(@Positive Integer userId);
+
+    void restoreUser(@Positive Integer userId);
+
+    List<UserResponse> getAllDeletedUsers();
 }

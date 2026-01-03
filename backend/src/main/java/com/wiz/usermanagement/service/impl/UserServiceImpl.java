@@ -1,5 +1,6 @@
 package com.wiz.usermanagement.service.impl;
 
+import com.wiz.usermanagement.config.persistence.HibernateFilterManager;
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
 import com.wiz.usermanagement.exception.EmailAlreadyExistsException;
@@ -10,15 +11,18 @@ import com.wiz.usermanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
 
     public final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final HibernateFilterManager filterManager;
 
     @Override
     public UserResponse addUser(UserRequest request) {
@@ -34,8 +38,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User savedUser = userRepository.save(user);
-
-        return new UserResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getPhoneNumber());
+        return toResponse(savedUser);
     }
 
 
@@ -43,24 +46,15 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(user -> new UserResponse(
-                        user.getId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getPhoneNumber()
-                )).toList();
+                .map(this::toResponse)
+                .toList();
     }
 
     @Override
     public UserResponse getUserById(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-        return new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getPhoneNumber()
-        );
+        return toResponse(user);
     }
 
     @Override
@@ -78,23 +72,56 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User updatedUser = userRepository.save(user);
-
-        UserResponse response = new UserResponse();
-        response.setId(updatedUser.getId());
-        response.setName(updatedUser.getName());
-        response.setEmail(updatedUser.getEmail());
-        response.setPhoneNumber(updatedUser.getPhoneNumber());
-
-        return response;
+        return toResponse(updatedUser);
     }
 
     @Override
     public void deleteUser(Integer userId) {
+
+        filterManager.enableNotDeletedFilter();
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(
                         "User not found with id: " + userId));
 
         userRepository.delete(user);
+    }
+
+    @Override
+    public void restoreUser(Integer userId) {
+
+        filterManager.disableDeletedFilter();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "Deleted user not found with id: " + userId));
+
+        user.setDeleted(false);
+        user.setDeletedAt(null);
+
+        userRepository.save(user);
+
+        filterManager.enableNotDeletedFilter();
+    }
+
+    @Override
+    public List<UserResponse> getAllDeletedUsers() {
+
+        filterManager.enableDeletedFilter();
+
+        return userRepository.findAllDeletedUsers()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    private UserResponse toResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhoneNumber()
+        );
     }
 
 
