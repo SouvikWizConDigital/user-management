@@ -1,15 +1,14 @@
 package com.wiz.usermanagement.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
-import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,18 +20,20 @@ import java.time.Instant;
 @SQLDelete(sql = "UPDATE users SET deleted = true, deleted_at = now() WHERE id = ?")
 
 @FilterDef(
-        name = "deletedFilter",
+        name = "deletedUserFilter",
         parameters = @ParamDef(name = "isDeleted", type = Boolean.class)
 )
 @Filter(
-        name = "deletedFilter",
+        name = "deletedUserFilter",
         condition = "deleted = :isDeleted"
 )
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue
+    @UuidGenerator
+    @Column(nullable = false, updatable = false)
+    private UUID id;
 
     @Column(nullable = false)
     @NotBlank

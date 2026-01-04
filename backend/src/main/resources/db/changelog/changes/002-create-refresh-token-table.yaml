@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 002-create-refresh-token-table
+      id: 002-create-refresh-token
       author: souvik
       changes:
         - createTable:
@@ -8,28 +8,27 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
-                  autoIncrement: true
+                  type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
 
               - column:
                   name: token
-                  type: VARCHAR(255)
+                  type: varchar(255)
                   constraints:
                     nullable: false
                     unique: true
 
               - column:
                   name: expiry_date
-                  type: TIMESTAMP
+                  type: timestamp
 
               - column:
                   name: user_id
-                  type: INT
+                  type: uuid
                   constraints:
-                    nullable: true
+                    nullable: false
 
         - addForeignKeyConstraint:
             baseTableName: refresh_token

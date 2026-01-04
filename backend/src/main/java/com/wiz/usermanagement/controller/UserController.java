@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -24,11 +25,11 @@ import java.util.List;
 @Tag(name = "User-Management")
 @SecurityRequirement(name = "bearerAuth")
 @ApiResponses({
-        @ApiResponse(responseCode = "400", description = "Bad Request"),
-        @ApiResponse(responseCode = "401", description = "Unauthorized"),
-        @ApiResponse(responseCode = "403", description = "Forbidden"),
-        @ApiResponse(responseCode = "404", description = "Not Found"),
-        @ApiResponse(responseCode = "500", description = "Internal Server Error")
+        @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
+        @ApiResponse(responseCode = "401", ref = "#/components/responses/Unauthorized"),
+        @ApiResponse(responseCode = "403", ref = "#/components/responses/Forbidden"),
+        @ApiResponse(responseCode = "404", ref = "#/components/responses/NotFound"),
+        @ApiResponse(responseCode = "500", ref = "#/components/responses/ServerError")
 })
 public class UserController {
 
@@ -47,25 +48,25 @@ public class UserController {
     }
 
     @GetMapping("/getuserbyid/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable("id") @Positive Integer userId) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable("id") @NotNull UUID userId) {
         UserResponse response = userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/updateuser/{userId}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable @Positive Integer userId, @Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable @NotNull UUID userId, @Valid @RequestBody UserRequest userRequest) {
         UserResponse response = userService.updateUser(userId, userRequest);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/deleteuser/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable @Positive Integer userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable @NotNull UUID userId) {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/restoreuser/{userId}")
-    public ResponseEntity<Void> restoreUser(@PathVariable @Positive Integer userId) {
+    public ResponseEntity<Void> restoreUser(@PathVariable @NotNull UUID userId) {
         userService.restoreUser(userId);
         return ResponseEntity.noContent().build();
     }

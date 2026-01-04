@@ -4,9 +4,3 @@ databaseChangeLog:
 
   - include:
       file: db/changelog/changes/002-create-refresh-token-table.yaml
-
-  - include:
-      file: db/changelog/changes/003-add-phone-number-to-users.yaml
-
-  - include:
-      file: db/changelog/changes/004-soft-delete-users.yaml

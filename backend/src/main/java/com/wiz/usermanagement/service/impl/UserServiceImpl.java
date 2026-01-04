@@ -1,6 +1,5 @@
 package com.wiz.usermanagement.service.impl;
 
-import com.wiz.usermanagement.config.persistence.HibernateFilterManager;
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
 import com.wiz.usermanagement.exception.EmailAlreadyExistsException;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService {
 
     public final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final HibernateFilterManager filterManager;
 
     @Override
     public UserResponse addUser(UserRequest request) {
@@ -37,12 +36,12 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(request.getPhoneNumber())
                 .build();
 
-        User savedUser = userRepository.save(user);
-        return toResponse(savedUser);
+        return toResponse(userRepository.save(user));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -51,17 +50,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUserById(Integer userId) {
-        User user = userRepository.findById(userId)
+    @Transactional(readOnly = true)
+    public UserResponse getUserById(UUID userId) {
+        return userRepository.findActiveById(userId)
+                .map(this::toResponse)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-        return toResponse(user);
     }
 
     @Override
-    public UserResponse updateUser(Integer userId, UserRequest userRequest) {
+    public UserResponse updateUser(UUID userId, UserRequest userRequest) {
         User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(
-                        "User not found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         User user = User.builder()
                 .id(existingUser.getId())
@@ -71,44 +70,36 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(userRequest.getPhoneNumber())
                 .build();
 
-        User updatedUser = userRepository.save(user);
-        return toResponse(updatedUser);
+        return toResponse(userRepository.save(user));
     }
 
     @Override
-    public void deleteUser(Integer userId) {
-
-        filterManager.enableNotDeletedFilter();
-
+    public void deleteUser(UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(
-                        "User not found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         userRepository.delete(user);
     }
 
     @Override
-    public void restoreUser(Integer userId) {
+    public void restoreUser(UUID userId) {
+        User user = userRepository.findByIdIncludingDeleted(userId)
+                .orElseThrow(() -> new UserNotFoundException("Deleted user not found with id: " + userId));
 
-        filterManager.disableDeletedFilter();
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(
-                        "Deleted user not found with id: " + userId));
+        if (!user.isDeleted()) {
+            return;
+        }
 
         user.setDeleted(false);
         user.setDeletedAt(null);
 
         userRepository.save(user);
-
-        filterManager.enableNotDeletedFilter();
     }
 
+
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponse> getAllDeletedUsers() {
-
-        filterManager.enableDeletedFilter();
-
         return userRepository.findAllDeletedUsers()
                 .stream()
                 .map(this::toResponse)

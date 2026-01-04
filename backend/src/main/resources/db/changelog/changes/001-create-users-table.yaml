@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 001-create-users-table
+      id: 001-create-users
       author: souvik
       changes:
         - createTable:
@@ -8,25 +8,43 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: INT
-                  autoIncrement: true
+                  type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
 
               - column:
                   name: name
-                  type: VARCHAR(255)
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
 
               - column:
                   name: email
-                  type: VARCHAR(255)
+                  type: varchar(255)
                   constraints:
                     nullable: false
                     unique: true
 
               - column:
                   name: password
-                  type: VARCHAR(255)
+                  type: varchar(255)
                   constraints:
                     nullable: false
+
+              - column:
+                  name: phone_number
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: deleted_at
+                  type: timestamp

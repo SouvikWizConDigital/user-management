@@ -2,9 +2,10 @@ package com.wiz.usermanagement.service;
 
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
 
@@ -12,13 +13,13 @@ public interface UserService {
 
     List<UserResponse> getAllUsers();
 
-    UserResponse getUserById(@Positive Integer userId);
+    UserResponse getUserById(@NotNull UUID userId);
 
-    UserResponse updateUser(@Positive Integer userId, UserRequest user);
+    UserResponse updateUser(@NotNull UUID userId, UserRequest user);
 
-    void deleteUser(@Positive Integer userId);
+    void deleteUser(@NotNull UUID userId);
 
-    void restoreUser(@Positive Integer userId);
+    void restoreUser(@NotNull UUID userId);
 
     List<UserResponse> getAllDeletedUsers();
 }

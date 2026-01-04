@@ -3,8 +3,10 @@ package com.wiz.usermanagement.security.model;
 import com.wiz.usermanagement.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,16 +17,18 @@ import java.time.Instant;
 public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @UuidGenerator
+    @Column(nullable = false, updatable = false)
+    private UUID id;
 
     @Column(unique = true, nullable = false)
     private String token;
 
     private Instant expiryDate;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }
 

@@ -31,7 +31,7 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
         String accessToken = accountService.login(request, response);
         return ResponseEntity.ok(Map.of("accessToken", accessToken));
     }
