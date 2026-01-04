@@ -16,7 +16,8 @@ public class SoftDeleteAspect {
 
     @Before("execution(* com.wiz.usermanagement.service.impl.UserServiceImpl.getAllUsers(..)) || " +
             "execution(* com.wiz.usermanagement.service.impl.UserServiceImpl.getUserById(..)) || " +
-            "execution(* com.wiz.usermanagement.service.impl.UserServiceImpl.updateUser(..))")
+            "execution(* com.wiz.usermanagement.service.impl.UserServiceImpl.updateUser(..)) || " +
+            "execution(* com.wiz.usermanagement.service.impl.UserServiceImpl.deleteUser(..))")
     public void enableDeletedFilter() {
         Session session = entityManager.unwrap(Session.class);
         session.enableFilter("deletedUserFilter").setParameter("isDeleted", false);

@@ -3,8 +3,6 @@ package com.wiz.usermanagement.controller;
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
 import com.wiz.usermanagement.service.UserService;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,13 +22,13 @@ import java.util.UUID;
 @Validated
 @Tag(name = "User-Management")
 @SecurityRequirement(name = "bearerAuth")
-@ApiResponses({
-        @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
-        @ApiResponse(responseCode = "401", ref = "#/components/responses/Unauthorized"),
-        @ApiResponse(responseCode = "403", ref = "#/components/responses/Forbidden"),
-        @ApiResponse(responseCode = "404", ref = "#/components/responses/NotFound"),
-        @ApiResponse(responseCode = "500", ref = "#/components/responses/ServerError")
-})
+//@ApiResponses({
+//        @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
+//        @ApiResponse(responseCode = "401", ref = "#/components/responses/Unauthorized"),
+//        @ApiResponse(responseCode = "403", ref = "#/components/responses/Forbidden"),
+//        @ApiResponse(responseCode = "404", ref = "#/components/responses/NotFound"),
+//        @ApiResponse(responseCode = "500", ref = "#/components/responses/ServerError")
+//})
 public class UserController {
 
     public final UserService userService;

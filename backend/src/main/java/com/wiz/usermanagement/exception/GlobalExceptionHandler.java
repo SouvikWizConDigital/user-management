@@ -52,6 +52,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(UserAlreadyRestoredException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserAlreadyRestored(UserAlreadyRestoredException ex, WebRequest request) {
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                "https://example.com/problems/user-already-restored",
+                "User Already Restored",
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                request.getDescription(false),
+                Instant.now(),
+                null
+        );
+
+        return ResponseEntity.badRequest().body(response);
+    }
+
     /* VALIDATION (@RequestBody) */
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -20,8 +20,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT u FROM User u WHERE u.deleted = true")
     List<User> findAllDeletedUsers();
 
-    @Query("SELECT u FROM User u WHERE u.id = :id")
-    Optional<User> findByIdIncludingDeleted(@Param("id") UUID id);
+//    @Query("SELECT u FROM User u WHERE u.id = :id")
+//    Optional<User> findByIdIncludingDeleted(@Param("id") UUID id);
 
     @Query("SELECT u FROM User u WHERE u.id = :id")
     Optional<User> findActiveById(@Param("id") UUID id);

@@ -3,6 +3,7 @@ package com.wiz.usermanagement.service.impl;
 import com.wiz.usermanagement.dto.UserRequest;
 import com.wiz.usermanagement.dto.UserResponse;
 import com.wiz.usermanagement.exception.EmailAlreadyExistsException;
+import com.wiz.usermanagement.exception.UserAlreadyRestoredException;
 import com.wiz.usermanagement.exception.UserNotFoundException;
 import com.wiz.usermanagement.model.User;
 import com.wiz.usermanagement.repository.UserRepository;
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(UUID userId, UserRequest userRequest) {
-        User existingUser = userRepository.findById(userId)
+        User existingUser = userRepository.findActiveById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         User user = User.builder()
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(UUID userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findActiveById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         userRepository.delete(user);
@@ -83,11 +84,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void restoreUser(UUID userId) {
-        User user = userRepository.findByIdIncludingDeleted(userId)
-                .orElseThrow(() -> new UserNotFoundException("Deleted user not found with id: " + userId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         if (!user.isDeleted()) {
-            return;
+            throw new UserAlreadyRestoredException("User already restored with id: " + userId);
         }
 
         user.setDeleted(false);
