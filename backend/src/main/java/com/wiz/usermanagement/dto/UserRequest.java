@@ -1,13 +1,13 @@
 package com.wiz.usermanagement.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import com.wiz.usermanagement.model.enums.Role;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,5 +29,8 @@ public class UserRequest {
     @NotBlank
     @Pattern(regexp = "^[0-9]{10}$")
     private String phoneNumber;
+
+    @NotEmpty(message = "At least one role must be provided")
+    private Set<Role> roles;
 }
 

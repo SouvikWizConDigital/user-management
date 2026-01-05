@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,12 +65,14 @@ public class UserController {
     }
 
     @PutMapping("/restoreuser/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> restoreUser(@PathVariable @NotNull UUID userId) {
         userService.restoreUser(userId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/getdeletedusers")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getDeletedUsers() {
         List<UserResponse> response = userService.getAllDeletedUsers();
         return ResponseEntity.status(HttpStatus.OK).body(response);

@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-user-roles-mapping
+      author: souvik
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_roles_user
+                    referencedTableName: users
+                    referencedColumnNames: id
+              - column:
+                  name: roles
+                  type: varchar(20)
+                  constraints:
+                    nullable: false

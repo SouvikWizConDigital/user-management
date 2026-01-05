@@ -1,6 +1,12 @@
 package com.wiz.usermanagement.dto;
 
-import lombok.*;
+import com.wiz.usermanagement.model.enums.Role;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -12,4 +18,5 @@ public class UserResponse {
     private String name;
     private String email;
     private String phoneNumber;
+    private Set<Role> roles;
 }

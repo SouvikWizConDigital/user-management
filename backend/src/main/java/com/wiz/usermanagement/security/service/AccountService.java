@@ -1,6 +1,7 @@
 package com.wiz.usermanagement.security.service;
 
 import com.wiz.usermanagement.dto.UserRequest;
+import com.wiz.usermanagement.exception.EmailAlreadyExistsException;
 import com.wiz.usermanagement.model.User;
 import com.wiz.usermanagement.repository.UserRepository;
 import com.wiz.usermanagement.security.dto.LoginRequest;
@@ -36,7 +37,7 @@ public class AccountService {
     public void register(UserRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("User already exists");
+            throw new EmailAlreadyExistsException("User already exists");
         }
 
         User user = User.builder()
@@ -44,6 +45,7 @@ public class AccountService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
+                .roles(request.getRoles())
                 .build();
 
         userRepository.save(user);

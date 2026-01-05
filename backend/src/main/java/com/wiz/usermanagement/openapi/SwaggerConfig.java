@@ -98,4 +98,20 @@ public class SwaggerConfig {
                         .pathsToMatch("/user/**")
                         .build();
         }
+
+        @Bean
+        public GroupedOpenApi userApi() {
+                return GroupedOpenApi.builder()
+                        .group("1-Standard-User")
+                        .pathsToMatch("/user/getallusers", "/user/getuserbyid/**", "/user/updateuser/**", "/user/adduser")
+                        .build();
+        }
+
+        @Bean
+        public GroupedOpenApi adminApi() {
+                return GroupedOpenApi.builder()
+                        .group("2-Administrator")
+                        .pathsToMatch("/user/getdeletedusers", "/user/restoreuser/**", "/user/deleteuser/**")
+                        .build();
+        }
 }

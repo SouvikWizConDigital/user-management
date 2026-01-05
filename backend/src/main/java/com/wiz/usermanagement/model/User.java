@@ -1,5 +1,6 @@
 package com.wiz.usermanagement.model;
 
+import com.wiz.usermanagement.model.enums.Role;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,8 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -56,5 +59,11 @@ public class User {
 
     @Column(name = "deleted_at")
     private Instant deletedAt;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "roles")
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
 }
